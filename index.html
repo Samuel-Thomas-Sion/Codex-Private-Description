@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Codex Neural Interface</title>
+
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    font-family: Arial, sans-serif;
+    color: white;
+    overflow: hidden;
+  }
+
+  /* Particle canvas sits behind everything */
+  #particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  /* scanline effect */
+  .scanline {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,170,255,0.05),
+      rgba(0,170,255,0.05) 1px,
+      transparent 2px,
+      transparent 6px
+    );
+    z-index: 1;
+    pointer-events: none;
+    animation: scanMove 6s linear infinite;
+  }
+
+  @keyframes scanMove {
+    0% { transform: translateY(-10%); }
+    100% { transform: translateY(10%); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: auto;
+    padding: 30px;
+  }
+
+  .header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #00aaff;
+    text-shadow: 0 0 15px #00aaff;
+    animation: pulse 3s infinite alternate;
+    margin-bottom: 20px;
+  }
+
+  @keyframes pulse {
+    from { text-shadow: 0 0 8px #00aaff; }
+    to { text-shadow: 0 0 22px #00ccff; }
+  }
+
+  .section {
+    background: rgba(0,170,255,0.06);
+    border: 1px solid rgba(0,170,255,0.5);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 12px rgba(0,170,255,0.2);
+    opacity: 0;
+    transform: translateY(15px);
+    animation: appear 0.6s forwards;
+  }
+
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.4s; }
+  .section:nth-child(4) { animation-delay: 0.6s; }
+  .section:nth-child(5) { animation-delay: 0.8s; }
+  .section:nth-child(6) { animation-delay: 1s; }
+  .section:nth-child(7) { animation-delay: 1.2s; }
+
+  @keyframes appear {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .title {
+    color: #00aaff;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-shadow: 0 0 8px #00aaff;
+  }
+
+  .rank {
+    color: #ffd700;
+    font-weight: bold;
+  }
+
+  .section:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px #00aaff;
+    transition: 0.3s;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #00aaff;
+    text-shadow: 0 0 10px #00aaff;
+  }
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+<div class="scanline"></div>
+
+<div class="container">
+
+  <div class="header">⚜️ CODEX NEURAL SYSTEM INTERFACE ⚜️</div>
+
+  <div class="section">
+    The Codex is a structured chess system designed around progression, activity, and contribution.<br><br>
+    Members exist within a dynamic framework where engagement determines status, responsibility, and advancement.
+  </div>
+
+  <div class="section">
+    <div class="title">🧭 SYSTEM FUNCTION</div>
+
+    Activity → progression within the system<br>
+    Performance → recognition and visibility<br>
+    Contribution → authority and responsibility<br><br>
+
+    The system rewards consistency over time, not isolated performance.
+  </div>
+
+  <div class="section">
+    <div class="title">🧩 ENTRY STATUS</div>
+
+    Initiates of the Codex begin at baseline level.<br><br>
+
+    • Play games<br>
+    • Engage in chat<br>
+    • Participate in events<br><br>
+
+    System presence is established through activity.
+  </div>
+
+  <div class="section">
+    <div class="title">🏛️ PROGRESSION STRUCTURE</div>
+
+    <span class="rank">Initiate</span><br>
+    <span class="rank">Keeper of Moves</span><br>
+    <span class="rank">Guardian of Lines</span><br>
+    <span class="rank">Warden</span><br>
+    <span class="rank">Grand Protector</span><br><br>
+
+    Advancement is earned through sustained contribution.
+  </div>
+
+  <div class="section">
+    <div class="title">⚙️ OPERATIONAL BEHAVIOUR</div>
+
+    Active → visibility increases<br>
+    Consistent → responsibility increases<br>
+    Inactive → system presence fades<br><br>
+
+    The Codex adapts to engagement patterns.
+  </div>
+
+  <div class="section">
+    <div class="title">🔓 SYSTEM EXPANSION</div>
+
+    Codex Trials<br>
+    Internal tournaments<br>
+    Vote-based chess conflicts<br>
+    Recognition systems<br>
+    Expansion protocols
+  </div>
+
+  <div class="section">
+    <div class="title">📜 CODEX CONDUCT</div>
+
+    • Stay active<br>
+    • Respect structure<br>
+    • Avoid disruption<br>
+    • Contribute meaningfully
+  </div>
+
+  <div class="footer">
+    SYSTEM ONLINE • NEURAL CORE ACTIVE • PROGRESSION CONTINUOUS
+  </div>
+
+</div>
+
+<script>
+/* PARTICLE ENGINE */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2,
+    dx: (Math.random() - 0.5) * 0.6,
+    dy: (Math.random() - 0.5) * 0.6
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#00aaff";
+
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+
+</body>
+</html>
